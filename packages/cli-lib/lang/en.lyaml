@@ -518,6 +518,14 @@ en:
             options:
               initialUpload:
                 describe: "Upload directory before watching for updates"
+          open:
+            describe: "Open available projects for the specified account"
+            options:
+              account:
+                describe: "View account projects"
+            examples:
+              default: "Opens the projects page for the specified account"
+            success: "Successfully opened projects for account id \"{{ accountId }}\""
           download:
             describe: "Download your project files from HubSpot and write to a path on your computer"
             examples:
@@ -559,6 +567,17 @@ en:
                 describe: "Name to use for created sandbox"
             success:
               create: "Sandbox \"{{ name }}\" with portalId \"{{ sandboxHubId }}\" created successfully."
+          delete:
+            describe: "Delete a sandbox account"
+            debug:
+              deleting: "Deleting sandbox account \"{{ account }}\""
+            examples:
+              default: "Deletes a sandbox account"
+            positionals:
+              account:
+                describe: "Sandbox account to delete"
+            success:
+              delete: "Sandbox \"{{ account }}\" with portalId \"{{ sandboxHubId }}\" deleted successfully."
       secrets:
         describe: "Manage HubSpot secrets."
         subcommands:
@@ -609,6 +628,20 @@ en:
             positionals:
               src:
                 describe: "Path to the local theme, relative to your current working directory."
+      use:
+        describe: "Change default account used in config."
+        errors:
+          accountNotFound: "The account \"{{ specifiedAccount }}\" was not found in {{ configPath }}."
+        examples:
+          default: "Select account to use as the default from a list"
+          idBased: "Set the default account to the account in the config with accountId equal to \"1234567\""
+          nameBased: "Set the default account to the account in the config with name equal to \"MyAccount\""
+        positionals:
+          newDefault:
+            describe: "Account name or id to use as the default"
+        promptMessage: "Select an account to use as the default"
+        success:
+          defaultAccountUpdated: "Default account updated to: \"{{ accountName }}\"."
       upload:
         describe: "Upload a folder or file from your computer to the HubSpot CMS."
         errors:
@@ -739,3 +772,7 @@ en:
           enterName: "Enter a name to use for the sandbox: "
           errors:
             invalidName: "You entered an invalid name. Please try again."
+            nameRequired: "An account is required. Please try again."
+            spacesInName: "The account may not contain spaces. Please try again."
+          enterSandboxAccountName: "Enter the sandbox account you want to delete"
+          enterParentAccountName: "Enter the account that the sandbox belongs to"

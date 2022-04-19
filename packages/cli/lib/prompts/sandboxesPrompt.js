@@ -19,6 +19,30 @@ const createSandboxPrompt = () => {
   ]);
 };
 
+const deleteSandboxPrompt = config => {
+  return promptUser([
+    {
+      name: 'sandboxAccount',
+      message: i18n(`${i18nKey}.enterSandboxAccountName`),
+      type: 'list',
+      look: false,
+      pageSize: 20,
+      choices: config.portals.map(p => p.name || p.portalId),
+      default: config.defaultPortal,
+    },
+    {
+      name: 'parentAccount',
+      message: i18n(`${i18nKey}.enterParentAccountName`),
+      type: 'list',
+      look: false,
+      pageSize: 20,
+      choices: config.portals.map(p => p.name || p.portalId),
+      default: config.defaultPortal,
+    },
+  ]);
+};
+
 module.exports = {
   createSandboxPrompt,
+  deleteSandboxPrompt,
 };
