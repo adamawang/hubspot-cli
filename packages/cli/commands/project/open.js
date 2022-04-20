@@ -5,6 +5,7 @@ const {
   addConfigOptions,
   getAccountId,
   addUseEnvironmentOptions,
+  addTestingOptions,
 } = require('../../lib/commonOpts');
 const { loadAndValidateOptions } = require('../../lib/validation');
 const { i18n } = require('@hubspot/cli-lib/lib/lang');
@@ -33,6 +34,11 @@ exports.handler = async options => {
 };
 
 exports.builder = yargs => {
+  addConfigOptions(yargs, true);
+  addAccountOptions(yargs, true);
+  addUseEnvironmentOptions(yargs, true);
+  addTestingOptions(yargs, true);
+
   yargs.options({
     account: {
       describe: i18n(`${i18nKey}.options.account.describe`),
@@ -41,10 +47,6 @@ exports.builder = yargs => {
   });
 
   yargs.example([['$0 project open', i18n(`${i18nKey}.examples.default`)]]);
-
-  addConfigOptions(yargs, true);
-  addAccountOptions(yargs, true);
-  addUseEnvironmentOptions(yargs, true);
 
   return yargs;
 };
