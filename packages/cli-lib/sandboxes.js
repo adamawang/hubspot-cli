@@ -1,4 +1,4 @@
-const { EXIT_CODES } = require('../cli/lib/enums/exitCodes');
+// const { EXIT_CODES } = require('../cli/lib/enums/exitCodes');
 const {
   createSandbox: _createSandbox,
   deleteSandbox: _deleteSandbox,
@@ -17,7 +17,7 @@ async function createSandbox(accountId, name) {
     resp = await _createSandbox(accountId, name);
   } catch (err) {
     logger.error(err.error.message);
-    process.exit(EXIT_CODES.ERROR);
+    process.exit(1);
   }
 
   return {
