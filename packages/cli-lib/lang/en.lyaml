@@ -48,6 +48,9 @@ en:
           type:
             describe: "Authentication mechanism"
             defaultDescription: "\"{{ authMethod }}\": \nAn access token tied to a specific user account. This is the recommended way of authenticating with local development tools."
+        options:
+          accountId:
+            describe: "Account ID to authenticate to"
         success:
           configFileUpdated: "{{ configFilename }} updated with {{ authMethod }}."
       config:
@@ -331,6 +334,8 @@ en:
           auth:
             describe: "Specify auth method to use [\"personalaccesskey\", \"oauth2\", \"apikey\"]"
             defaultDescription: "\"{{ defaultType }}\": \nAn access token tied to a specific user account. This is the recommended way of authenticating with local development tools."
+          accountId:
+            describe: "Account ID to authenticate to"
         success:
           configFileCreated: "The config file \"{{ configPath }}\" was created using \"{{ authType }}\" for account {{ account }}."
         info:
@@ -556,12 +561,13 @@ en:
             examples:
               default: "Creates a sandbox account named MySandboxAccount."
             info:
-              auth: "Run \"hs auth\" to authenticate with the new sandbox account."
+              auth: "Run \"hs auth --account={{ sandboxHubId }}\" to authenticate with the new sandbox account."
             positionals:
               name:
                 describe: "Name to use for created sandbox"
             success:
               create: "Sandbox \"{{ name }}\" with portalId \"{{ sandboxHubId }}\" created successfully."
+              configFileUpdated: "{{ configFilename }} updated with {{ authMethod }}."
           delete:
             describe: "Delete a sandbox account"
             debug:
