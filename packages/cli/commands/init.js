@@ -45,8 +45,8 @@ const TRACKING_STATUS = {
   COMPLETE: 'complete',
 };
 
-const personalAccessKeyConfigCreationFlow = async env => {
-  const configData = await personalAccessKeyPrompt({ env });
+const personalAccessKeyConfigCreationFlow = async (env, accountId) => {
+  const configData = await personalAccessKeyPrompt({ env, accountId });
   const { name } = await promptUser([ACCOUNT_NAME]);
   const accountConfig = {
     ...configData,
@@ -91,7 +91,11 @@ exports.describe = i18n(`${i18nKey}.describe`, {
 });
 
 exports.handler = async options => {
-  const { auth: authType = PERSONAL_ACCESS_KEY_AUTH_METHOD.value, c } = options;
+  const {
+    auth: authType = PERSONAL_ACCESS_KEY_AUTH_METHOD.value,
+    c,
+    accountId: optionalAccountId,
+  } = options;
   const configPath = (c && path.join(getCwd(), c)) || getConfigPath();
   setLogLevel(options);
   logDebugInfo(options);
@@ -115,7 +119,10 @@ exports.handler = async options => {
   handleExit(deleteEmptyConfigFile);
 
   try {
-    const { accountId, name } = await CONFIG_CREATION_FLOWS[authType](env);
+    const { accountId, name } = await CONFIG_CREATION_FLOWS[authType](
+      env,
+      optionalAccountId
+    );
     const configPath = getConfigPath();
 
     logger.success(
@@ -147,6 +154,13 @@ exports.builder = yargs => {
     defaultDescription: i18n(`${i18nKey}.options.auth.defaultDescription`, {
       defaultType: PERSONAL_ACCESS_KEY_AUTH_METHOD.value,
     }),
+  });
+
+  yargs.options({
+    accountId: {
+      describe: i18n(`${i18nKey}.options.accountId.describe`),
+      type: 'string',
+    },
   });
 
   addConfigOptions(yargs, true);

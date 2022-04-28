@@ -1,18 +1,12 @@
-const { logger } = require('@hubspot/cli-lib/logger');
-const {
-  getConfig,
-  getConfigPath,
-  updateDefaultAccount,
-} = require('@hubspot/cli-lib/lib/config');
-const { loadAndValidateOptions } = require('../../../lib/validation');
-
-const { getAccountId } = require('../../../lib/commonOpts');
-const { trackCommandUsage } = require('../../../lib/usageTracking');
-const { promptUser } = require('../../../lib/prompts/promptUtils');
+const { addConfigOptions, addAccountOptions } = require('../lib/commonOpts');
 const { i18n } = require('@hubspot/cli-lib/lib/lang');
+const { promptUser } = require('../lib/prompts/promptUtils');
+const { loadAndValidateOptions } = require('../lib/validation');
+const { getConfig, getConfigPath } = require('@hubspot/cli-lib');
+const { logger } = require('@hubspot/cli-lib/logger');
+const { updateDefaultAccount } = require('@hubspot/cli-lib/lib/config');
 
-const i18nKey =
-  'cli.commands.config.subcommands.set.subcommands.defaultAccount';
+const i18nKey = 'cli.commands.use';
 
 const selectAccountFromConfig = async config => {
   const { default: selectedDefault } = await promptUser([
@@ -30,19 +24,19 @@ const selectAccountFromConfig = async config => {
   return selectedDefault;
 };
 
-exports.command = 'default-account [newDefault]';
+exports.command = 'use [newDefault]';
 exports.describe = i18n(`${i18nKey}.describe`);
 
 exports.handler = async options => {
   await loadAndValidateOptions(options);
 
-  const accountId = getAccountId(options);
+  // const accountId = getAccountId(options);
   const config = getConfig();
   const configPath = getConfigPath();
   const { newDefault: specifiedNewDefault } = options;
   let newDefault;
 
-  trackCommandUsage('config-set-default-account', {}, accountId);
+  // trackCommandUsage('config-set-default-account', {}, accountId);
 
   if (!specifiedNewDefault) {
     newDefault = await selectAccountFromConfig(config);
@@ -73,6 +67,9 @@ exports.handler = async options => {
 };
 
 exports.builder = yargs => {
+  addConfigOptions(yargs, true);
+  addAccountOptions(yargs, true);
+
   yargs.positional('newDefault', {
     describe: i18n(`${i18nKey}.positionals.newDefault.describe`),
     type: 'string',

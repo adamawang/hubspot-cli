@@ -43,6 +43,7 @@ async function getAccessToken(
       throw e;
     }
   }
+
   return {
     portalId: response.hubId,
     accessToken: response.oauthAccessToken,
@@ -143,6 +144,7 @@ const updateConfigWithPersonalAccessKey = async (configData, makeDefault) => {
     logErrorInstance(err);
     return;
   }
+
   const { portalId, accessToken, expiresAt } = token;
 
   const updatedConfig = updateAccountConfig({
